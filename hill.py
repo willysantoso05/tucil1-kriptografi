@@ -24,17 +24,27 @@ def modInverse(a, m):
             return x 
     return 1
 
+def gcd(a, b): 
+    while a != 0:
+        a, b = b, a % b
+    return a
+
+# Function to check and print if  
+# two numbers are co-prime or not  
+def isCoprime(x): 
+    return (gcd(NUMBER_OF_ALPHABET, x) == 1) 
+
 def hillEncrypt(text,k,m):
     result = []
     for item in text:
-        multiple = np.dot(k, np.array(item))
+        multiple = np.dot(k, item)
         for number in multiple:
             result.append(number % NUMBER_OF_ALPHABET)
     return result
 
-def hillDecrypt(text,k,m, determinant):
+def hillDecrypt(text,k,m):
     result = []
-    key_inverse =  (np.round_((np.linalg.inv(k) * determinant) * modInverse(determinant, NUMBER_OF_ALPHABET))).astype(int) % 26
+    key_inverse =  (np.round_((np.linalg.inv(k) * np.linalg.det(k)) * modInverse(determinant, NUMBER_OF_ALPHABET))).astype(int) % 26
 
     for item in text:
         multiple = np.dot(key_inverse, item)
@@ -110,16 +120,17 @@ if __name__ == "__main__":
     numpy_key = np.array([key[i:i+m_linear] for i in range (0, len(key), m_linear)])
 
     if opt == 1:
-        print("ENCRYPTING...")
+        print("\nENCRYPTING...")
         result = hillEncrypt(list_of_chars, numpy_key, m_linear)
     else:
-        print("DECRYPTING...")
+        print("\nDECRYPTING...")
         determinant = np.linalg.det(numpy_key)
-        if(determinant == 0):
+        if(determinant == 0 or not isCoprime(determinant) ):
             result = []
             print("Text can't be decrypt with input key, try another key.")
         else:
-            result = hillDecrypt(list_of_chars, numpy_key, m_linear, determinant)
+            result = hillDecrypt(list_of_chars, numpy_key, m_linear)
+            print("RES =", result)
     
     if(len(result)!=0):
         print("RESULT TEXT =", (''.join(convertIntToString(result))).upper())
