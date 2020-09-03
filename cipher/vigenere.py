@@ -10,8 +10,6 @@ class Vigenere(Base):
     matrix = list()
 
     def encrypt(self, plain_text: str, *args, **kwargs) -> str:
-        if not self.key:
-            raise self.NoKeyException()
         list_int_plain_text = str_to_list_int(plain_text, *args, **kwargs)
 
         list_int_key = str_to_list_int(self.key, *args, **kwargs)
@@ -24,8 +22,6 @@ class Vigenere(Base):
         return list_int_to_str(list_int_cipher_text, *args, **kwargs)
 
     def decrypt(self, cipher_text: str, *args, **kwargs) -> str:
-        if not self.key:
-            raise self.NoKeyException()
 
         list_int_cipher_text = str_to_list_int(cipher_text, *args, **kwargs)
 

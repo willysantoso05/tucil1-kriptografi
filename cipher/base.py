@@ -1,8 +1,6 @@
 class Base:
-    class NoKeyException(Exception):
-        pass
-
-    key = ''
+    def __init__(self, key: str):
+        self.key = key
 
     def encrypt(self, *args, **kwargs):
         pass
