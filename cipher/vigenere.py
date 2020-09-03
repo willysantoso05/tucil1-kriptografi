@@ -3,36 +3,36 @@ from random import shuffle
 from typing import List
 
 from .base import Base
-from utils import (str_to_list_int, list_int_to_str)
 
 
 class Vigenere(Base):
     matrix = list()
 
     def encrypt(self, plain_text: str, *args, **kwargs) -> str:
-        list_int_plain_text = str_to_list_int(plain_text, *args, **kwargs)
+        list_int_plain_text = Base.str_to_list_int(plain_text, *args, **kwargs)
 
-        list_int_key = str_to_list_int(self.key, *args, **kwargs)
+        list_int_key = Base.str_to_list_int(self.key, *args, **kwargs)
 
         list_int_cipher_text = [
             self.matrix[key][num]
             for key, num in zip(cycle(list_int_key), list_int_plain_text)
         ]
 
-        return list_int_to_str(list_int_cipher_text, *args, **kwargs)
+        return Base.list_int_to_str(list_int_cipher_text, *args, **kwargs)
 
     def decrypt(self, cipher_text: str, *args, **kwargs) -> str:
 
-        list_int_cipher_text = str_to_list_int(cipher_text, *args, **kwargs)
+        list_int_cipher_text = Base.str_to_list_int(cipher_text, *args,
+                                                    **kwargs)
 
-        list_int_key = str_to_list_int(self.key, *args, **kwargs)
+        list_int_key = Base.str_to_list_int(self.key, *args, **kwargs)
 
         list_int_plain_text = [
             self.matrix[key].index(num)
             for key, num in zip(cycle(list_int_key), list_int_cipher_text)
         ]
 
-        return list_int_to_str(list_int_plain_text, *args, **kwargs)
+        return Base.list_int_to_str(list_int_plain_text, *args, **kwargs)
 
     @staticmethod
     def generate_matrix(char_count: int,
