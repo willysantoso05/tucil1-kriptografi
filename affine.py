@@ -87,13 +87,13 @@ if __name__ == "__main__":
     print("\nINPUT TEXT =", text.upper())
     print("VALUE OF M =", m_key)
     print("VALUE OF B =", b_key)
-    inputtext = convertStringToInt(text.lower())
+    inputText = convertStringToInt(text.lower())
 
     if opt == 1:
-        print("ENCRYPTING")
-        result = affineEncrypt(inputtext, m_key, b_key)
+        print("ENCRYPTING...")
+        result = affineEncrypt(inputText, m_key, b_key)
     else:
-        print("DECRYPTING")
-        result = affineDecrypt(inputtext, m_key, b_key)
+        print("DECRYPTING...")
+        result = affineDecrypt(inputText, m_key, b_key)
 
     print("RESULT TEXT =", (''.join(convertIntToString(result))).upper())
