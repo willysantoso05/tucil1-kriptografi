@@ -44,3 +44,14 @@ class Base:
             if ((x * i) % y == 1): 
                 return i 
         return 1
+
+    @staticmethod
+    def gcd(x: int, y: int) -> int:
+        if(y==0): 
+            return x 
+        else: 
+            return Base.gcd(y, x%y)
+
+    @staticmethod
+    def isCoprime(x: int, y: int) -> int:
+        return Base.gcd(x,y) == 1

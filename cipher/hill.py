@@ -43,20 +43,20 @@ class Hill:
             matrix_int_cipher_text[-1].append(25)    #add Z character if text mod m != 0
         matrix_key = np.array([list_int_key[i:i+self.m_linear] for i in range (0, len(list_int_key), self.m_linear)])
 
-        determinant = np.linalg.det(matrix_key)
-        if(determinant == 0):
-            return "TEXT CAN NOT BE DECRYPTED"
-        else:
-            inverse_matrix_key =  (np.round_((np.linalg.inv(matrix_key) *determinant) * Base.modInverse(determinant, NUMBER_OF_ALPHABET))).astype(int) % NUMBER_OF_ALPHABET
+        determinant = int(np.linalg.det(matrix_key))
+        if(determinant == 0 or not Base.isCoprime(determinant, NUMBER_OF_ALPHABET)):
+            raise Exception("TEXT CAN NOT BE DECRYPTED, TRY ANOTHER KEY")
+        
+        inverse_matrix_key =  (np.round_((np.linalg.inv(matrix_key) *determinant) * Base.modInverse(determinant, NUMBER_OF_ALPHABET))).astype(int) % NUMBER_OF_ALPHABET
 
-            list_int_plain_text = []
+        list_int_plain_text = []
 
-            for item in matrix_int_cipher_text:
-                multiplication_result = np.dot(inverse_matrix_key, item)
-                for number in multiplication_result:
-                    list_int_plain_text.append(number % NUMBER_OF_ALPHABET)
-            
-            return Base.list_int_to_str(list_int_plain_text, *args, **kwargs)
+        for item in matrix_int_cipher_text:
+            multiplication_result = np.dot(inverse_matrix_key, item)
+            for number in multiplication_result:
+                list_int_plain_text.append(number % NUMBER_OF_ALPHABET)
+        
+        return Base.list_int_to_str(list_int_plain_text, *args, **kwargs)
 
     def processingKey(self):
         if(len(self.key) > self.m_linear * self.m_linear):
