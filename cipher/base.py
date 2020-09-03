@@ -36,3 +36,11 @@ class Base:
         '''Remove punctuation from the text using re.sub()
         '''
         return re.sub(filter, '', text)
+
+    @staticmethod
+    def modInverse(x: int, y: int) -> int:
+        x = x % y; 
+        for i in range(1, y): 
+            if ((x * i) % y == 1): 
+                return i 
+        return 1
