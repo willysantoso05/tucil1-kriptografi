@@ -33,4 +33,6 @@ class Base:
 
     @staticmethod
     def remove_punctuation(text: str, filter: str = '[^a-zA-Z]') -> str:
+        '''Remove punctuation from the text using re.sub()
+        '''
         return re.sub(filter, '', text)
