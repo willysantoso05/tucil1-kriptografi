@@ -18,7 +18,6 @@ class Playfair(Base):
         assert (len(self.key) == 25)
 
     def _encrypt_pair_(self, a: str, b: str) -> str:
-        assert (a != b)
         row_a, col_a = divmod(self.key.index(a), DEFAULT_WIDTH)
         row_b, col_b = divmod(self.key.index(b), DEFAULT_WIDTH)
 
@@ -60,7 +59,6 @@ class Playfair(Base):
         ])
 
     def _decrypt_pair_(self, a: str, b: str) -> str:
-        assert (a != b)
         row_a, col_a = divmod(self.key.index(a), DEFAULT_WIDTH)
         row_b, col_b = divmod(self.key.index(b), DEFAULT_WIDTH)
 
