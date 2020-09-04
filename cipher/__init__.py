@@ -1,4 +1,5 @@
-from .base import Base
-from .vigenere import Vigenere
 from .affine import Affine
+from .base import Base
 from .hill import Hill
+from .playfair import Playfair
+from .vigenere import Vigenere
