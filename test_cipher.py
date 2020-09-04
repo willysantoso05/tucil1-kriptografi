@@ -38,3 +38,14 @@ def test_playfair():
     assert (cipher == cipher_text)
     deciphered_text = 'temuixibunantimalamx'
     assert (c.decrypt(cipher) == deciphered_text)
+
+def test_super_encrypt():
+    key = 'sony'
+    plain = 'thisisplaintext'
+    k = 3
+
+    c = SuperEncrypt(key)
+    cipher = c.encrypt(plain, k)
+    cipher_text = 'lqcwwvajalvgsrg'
+    assert(cipher == cipher_text)
+    assert(c.decrypt(cipher_text, int(len(plain)/k)) == plain)
