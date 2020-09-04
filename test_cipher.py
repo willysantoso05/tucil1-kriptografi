@@ -39,6 +39,7 @@ def test_playfair():
     deciphered_text = 'temuixibunantimalamx'
     assert (c.decrypt(cipher) == deciphered_text)
 
+
 def test_super_encrypt():
     key = 'sony'
     plain = 'thisisplaintext'
@@ -47,5 +48,17 @@ def test_super_encrypt():
     c = SuperEncrypt(key)
     cipher = c.encrypt(plain, k)
     cipher_text = 'lqcwwvajalvgsrg'
-    assert(cipher == cipher_text)
-    assert(c.decrypt(cipher_text, int(len(plain)/k)) == plain)
+    assert (cipher == cipher_text)
+    assert (c.decrypt(cipher_text, int(len(plain) / k)) == plain)
+
+
+def test_enigma():
+    plain = 'en1, gm4aaaaa'
+
+    c = Enigma(rotors=[1, 2, 3], position=['l', 'q', 'b'], reflector='b')
+    cipher = c.encrypt(plain)
+    cipher_text = 'no1, as4ssbtq'
+
+    assert (cipher == cipher_text)
+    c.reset()
+    assert (c.decrypt(cipher) == plain)
