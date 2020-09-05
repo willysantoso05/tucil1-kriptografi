@@ -36,8 +36,8 @@ class Enigma(Base):
             'qcylxwenftzosmvjudkgiarphb', 'skxqlhcnwarvgmebjptyfdzuio',
             'qmgyvpedrcwtianuxfkzoslhjb', 'qjinsaydvkbfruhmcplewztgxo'
         ]
-        self.rotor_notch = [('Q', ), ('E', ), ('V', ), ('J', ), ('Z', ),
-                            ('Z', 'M'), ('Z', 'M'), ('Z', 'M')]
+        self.rotor_notch = [('q', ), ('e', ), ('v', ), ('j', ), ('a', ),
+                            ('z', 'm'), ('z', 'm'), ('z', 'm')]
         self.reflector_list = [
             'yruhqsldpxngokmiebfzcwvjat', 'fvpjiaoyedrzxwgctkuqsbnmhl'
         ]
@@ -73,20 +73,24 @@ class Enigma(Base):
 
     def _encrypt_one_(self, char):
         self._turn_rotor_()
+        # print('pos:', self.position)
         encrypted = char
         # translate from right to left
         for rotor_idx in range(len(self.rotors) - 1, -1, -1):
             diff = Base.str_to_list_int(self.position[rotor_idx])[0]
             encrypted = self._rotor_wiring_(
                 encrypted, self.rotor_list[self.rotors[rotor_idx]], diff)
+            # print(f'w{rotor_idx}:', encrypted)
         encrypted = self._reflect_(encrypted)
-
+        # print('r:', encrypted)
         # translate from left to right
         for rotor_idx in range(len(self.rotors)):
             diff = Base.str_to_list_int(self.position[rotor_idx])[0]
             encrypted = self._rotor_wiring_(
                 encrypted, self.inverse_rotor_list[self.rotors[rotor_idx]],
                 diff)
+            # print(f'w{rotor_idx}:', encrypted)
+
         return encrypted
 
     def encrypt(self, plain_text: str, *args, **kwargs) -> str:
