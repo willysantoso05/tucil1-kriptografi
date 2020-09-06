@@ -31,7 +31,8 @@ def test_hill_basic():
 
 def test_playfair():
     key = 'jalan ganesha sepuluh'
-    c = Playfair(key)
+    c = Playfair()
+    c.set_key(key)
     plain_text = 'temui ibu nanti malam'
     cipher = c.encrypt(plain_text)
     cipher_text = 'zbrsfykupglgrkvsnlqv'

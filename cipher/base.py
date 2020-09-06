@@ -3,7 +3,7 @@ from typing import List, Union
 
 
 class Base:
-    def __init__(self, key: str):
+    def __init__(self, key: str = ''):
         self.key = key
 
     def encrypt(self, plain_text: str, *args, **kwargs) -> str:
@@ -39,19 +39,19 @@ class Base:
 
     @staticmethod
     def modInverse(x: int, y: int) -> int:
-        x = x % y; 
-        for i in range(1, y): 
-            if ((x * i) % y == 1): 
-                return i 
+        x = x % y
+        for i in range(1, y):
+            if ((x * i) % y == 1):
+                return i
         return 1
 
     @staticmethod
     def gcd(x: int, y: int) -> int:
-        if(y==0): 
-            return x 
-        else: 
-            return Base.gcd(y, x%y)
+        if (y == 0):
+            return x
+        else:
+            return Base.gcd(y, x % y)
 
     @staticmethod
     def isCoprime(x: int, y: int) -> int:
-        return Base.gcd(x,y) == 1
+        return Base.gcd(x, y) == 1
