@@ -17,7 +17,9 @@ class MyWindow(QtWidgets.QMainWindow):
         self.decryptButton.clicked.connect(self.decryptButtonClicked)
 
         self.inputPlainText = self.findChild(QtWidgets.QTextEdit, 'InputPlainText')
+        self.inputPlainText.textChanged.connect(self.encryptButtonClicked)
         self.inputCipherText = self.findChild(QtWidgets.QTextEdit, 'InputCipherText')
+        # self.inputCipherText.textChanged.connect(self.decryptButtonClicked)
 
         #Khusus Affine
         self.inputKeyM = self.findChild(QtWidgets.QLineEdit, 'InputKeyM')
