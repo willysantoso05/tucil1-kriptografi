@@ -2,6 +2,8 @@ from collections import OrderedDict
 from math import sqrt
 import re
 
+from main import Ui_MainWindow
+from PyQt5 import QtCore, QtWidgets
 from .base import Base
 
 DEFAULT_KEY = 'abcdefghiklmnopqrstuvwxyz'
@@ -93,3 +95,27 @@ class Playfair(Base):
             self._decrypt_pair_(cipher_text[idx], cipher_text[idx + 1])
             for idx in range(0, len(cipher_text), 2)
         ])
+
+    def render(self, window: Ui_MainWindow):
+        self.groupBox_4 = QtWidgets.QGroupBox(window.cipherWidget)
+        self.groupBox_4.setGeometry(QtCore.QRect(9, 9, 441, 111))
+        self.groupBox_4.setObjectName("groupBox_4")
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.groupBox_4)
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.keyText = QtWidgets.QLineEdit(self.groupBox_4)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.keyText.sizePolicy().hasHeightForWidth())
+        self.keyText.setSizePolicy(sizePolicy)
+        self.keyText.setText("")
+        self.keyText.setObjectName("keyText")
+        self.horizontalLayout_3.addWidget(self.keyText)
+        window.verticalLayout_4.addWidget(self.groupBox_4)
+
+        self.retranslateUi()
+
+    def retranslateUi(self):
+        _translate = QtCore.QCoreApplication.translate
+        self.groupBox_4.setToolTip(_translate("MainWindow", "Specify Vigènere key"))
+        self.groupBox_4.setTitle(_translate("MainWindow", "Key"))

@@ -12,6 +12,13 @@ class Base:
     def decrypt(self, cipher_text: str, *args, **kwargs) -> str:
         return cipher_text
 
+    def render(self, window):
+        pass
+
+    def retranslateUi(self):
+        pass
+
+
     @staticmethod
     def str_to_list_int(
         text: Union[str, List[str]], base: int = ord('a')) -> List[int]:
