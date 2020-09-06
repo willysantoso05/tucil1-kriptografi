@@ -13,6 +13,8 @@ class Ui_MainWindow(object):
             Enigma(),
             SuperEncrypt()
         ]
+        self.cipher_text = ''
+        self.plain_text = ''
 
     def setupUi(self, MainWindow: QtWidgets.QMainWindow):
 
@@ -125,6 +127,13 @@ class Ui_MainWindow(object):
         self.groupBox_3.setObjectName("groupBox_3")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.groupBox_3)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
+        self.space = QtWidgets.QRadioButton(self.groupBox_3)
+        self.space.setChecked(True)
+        self.space.setObjectName("space")
+        self.verticalLayout_3.addWidget(self.space)
+        self.fiveLetters = QtWidgets.QRadioButton(self.groupBox_3)
+        self.fiveLetters.setObjectName("fiveLetters")
+        self.verticalLayout_3.addWidget(self.fiveLetters)
         self.cipherText = QtWidgets.QPlainTextEdit(self.groupBox_3)
         self.cipherText.setObjectName("cipherText")
         self.verticalLayout_3.addWidget(self.cipherText)
@@ -158,6 +167,9 @@ class Ui_MainWindow(object):
         self.decryptButton.clicked.connect(self.decrypt_clicked)
         self.cipherChooser.currentIndexChanged.connect(self.change_cipher)
 
+        self.space.toggled.connect(self.groupInOne)
+        self.fiveLetters.toggled.connect(self.groupInFive)
+
         self.cipher.render(self)
 
     def retranslateUi(self, MainWindow):
@@ -182,6 +194,8 @@ class Ui_MainWindow(object):
         self.cipherChooser.setItemText(
             5, _translate("MainWindow", "Super Encrypt Cipher"))
         self.groupBox_3.setTitle(_translate("MainWindow", "Cipher Text"))
+        self.space.setText(_translate("MainWindow", "Without space"))
+        self.fiveLetters.setText(_translate("MainWindow", "Group in 5 letters"))
         self.decryptButton.setToolTip(
             _translate("MainWindow", "Decrypt the plain text"))
         self.decryptButton.setText(_translate("MainWindow", "Decrypt"))
@@ -197,13 +211,13 @@ class Ui_MainWindow(object):
 
     def encrypt_clicked(self):
         plain_text = self.plainText.toPlainText()
-        cipher_text = self.cipher.encrypt(plain_text)
-        self.cipherText.setPlainText(cipher_text)
+        self.cipher_text = self.cipher.encrypt(plain_text)
+        self.cipherText.setPlainText(self.cipher_text)
 
     def decrypt_clicked(self):
         cipher_text = self.cipherText.toPlainText()
-        plain_text = self.cipher.decrypt(cipher_text)
-        self.plainText.setPlainText(plain_text)
+        self.plain_text = self.cipher.decrypt(cipher_text)
+        self.plainText.setPlainText(self.plain_text)
 
     def clean(self, layout):
         for i in reversed(range(layout.count())):
@@ -220,6 +234,12 @@ class Ui_MainWindow(object):
         print(self.cipher)
         self.cipher.render(self)
 
+    def groupInFive(self):
+        resultText = ' '.join([self.cipher_text[idx:idx+5] for idx in range(0,len(self.cipher_text), 5) ])
+        self.cipherText.setPlainText(resultText)
+
+    def groupInOne(self):
+        self.cipherText.setPlainText(self.cipher_text)
 
 if __name__ == "__main__":
     import sys
