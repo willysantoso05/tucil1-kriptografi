@@ -60,10 +60,21 @@ class Ui_MainWindow(object):
         self.plainText = QtWidgets.QPlainTextEdit(self.groupBox)
         self.plainText.setObjectName("plainText")
         self.verticalLayout.addWidget(self.plainText)
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setContentsMargins(-1, -1, -1, 0)
+        self.horizontalLayout.setObjectName("horizontalLayout")
         self.encryptButton = QtWidgets.QPushButton(self.groupBox)
         self.encryptButton.setObjectName("encryptButton")
-        self.verticalLayout.addWidget(self.encryptButton, 0,
-                                      QtCore.Qt.AlignHCenter)
+        self.horizontalLayout.addWidget(self.encryptButton, 0, QtCore.Qt.AlignHCenter)
+        self.decryptButton = QtWidgets.QPushButton(self.groupBox)
+        self.decryptButton.setObjectName("decryptButton")
+        self.horizontalLayout.addWidget(self.decryptButton, 0, QtCore.Qt.AlignHCenter)
+        self.verticalLayout.addLayout(self.horizontalLayout)
+        # self.verticalLayout.addWidget(self.plainText)
+        # self.encryptButton = QtWidgets.QPushButton(self.groupBox)
+        # self.encryptButton.setObjectName("encryptButton")
+        # self.verticalLayout.addWidget(self.encryptButton, 0,
+        #                               QtCore.Qt.AlignHCenter)
         # self.horizontalLayout.addWidget(self.groupBox)
         self.horizontalLayout_4.addWidget(self.groupBox)
         # self.horizontalLayout_4.addLayout(self.horizontalLayout)
@@ -136,11 +147,12 @@ class Ui_MainWindow(object):
         self.verticalLayout_3.addWidget(self.fiveLetters)
         self.cipherText = QtWidgets.QPlainTextEdit(self.groupBox_3)
         self.cipherText.setObjectName("cipherText")
+        self.cipherText.setReadOnly(True)
         self.verticalLayout_3.addWidget(self.cipherText)
-        self.decryptButton = QtWidgets.QPushButton(self.groupBox_3)
-        self.decryptButton.setObjectName("decryptButton")
-        self.verticalLayout_3.addWidget(self.decryptButton, 0,
-                                        QtCore.Qt.AlignHCenter)
+        # self.decryptButton = QtWidgets.QPushButton(self.groupBox_3)
+        # self.decryptButton.setObjectName("decryptButton")
+        # self.verticalLayout_3.addWidget(self.decryptButton, 0,
+        #                                 QtCore.Qt.AlignHCenter)
         self.horizontalLayout_4.addWidget(self.groupBox_3)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -174,7 +186,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        self.groupBox.setTitle(_translate("MainWindow", "Plain Text"))
+        self.groupBox.setTitle(_translate("MainWindow", "Input Text"))
         self.encryptButton.setToolTip(
             _translate("MainWindow", "Encrypt the plain text"))
         self.encryptButton.setText(_translate("MainWindow", "Encrypt"))
@@ -193,7 +205,7 @@ class Ui_MainWindow(object):
             4, _translate("MainWindow", "Enigma Cipher"))
         self.cipherChooser.setItemText(
             5, _translate("MainWindow", "Super Encrypt Cipher"))
-        self.groupBox_3.setTitle(_translate("MainWindow", "Cipher Text"))
+        self.groupBox_3.setTitle(_translate("MainWindow", "Output Text"))
         self.space.setText(_translate("MainWindow", "Without space"))
         self.fiveLetters.setText(_translate("MainWindow", "Group in 5 letters"))
         self.decryptButton.setToolTip(
@@ -210,14 +222,20 @@ class Ui_MainWindow(object):
         self.actionSave.setShortcut(_translate("MainWindow", "Ctrl+S"))
 
     def encrypt_clicked(self):
-        plain_text = self.plainText.toPlainText()
-        self.cipher_text = self.cipher.encrypt(plain_text)
-        self.cipherText.setPlainText(self.cipher_text)
+        input_text = self.plainText.toPlainText()
+        self.cipher_text = self.cipher.encrypt(input_text)
+        if(self.space.isChecked()):
+            self.groupInOne()
+        else:
+            self.groupInFive()
 
     def decrypt_clicked(self):
-        cipher_text = self.cipherText.toPlainText()
-        self.plain_text = self.cipher.decrypt(cipher_text)
-        self.plainText.setPlainText(self.plain_text)
+        input_text = self.plainText.toPlainText()
+        self.cipher_text = self.cipher.decrypt(input_text)
+        if(self.space.isChecked()):
+            self.groupInOne()
+        else:
+            self.groupInFive()
 
     def clean(self, layout):
         for i in reversed(range(layout.count())):
