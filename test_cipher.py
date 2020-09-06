@@ -55,9 +55,9 @@ def test_super_encrypt():
 def test_enigma():
     plain = 'en1, gm4aaaaa'
 
-    c = Enigma(rotors=[1, 2, 3], position=['l', 'q', 'b'], reflector='b')
+    c = Enigma(rotors=[1, 2, 3], position=['a', 'd', 'v'], reflector='b')
     cipher = c.encrypt(plain)
-    cipher_text = 'no1, as4ssbtq'
+    cipher_text = 'bt1, qa4gfjbw'
 
     assert (cipher == cipher_text)
     c.reset()
