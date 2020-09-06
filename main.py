@@ -12,24 +12,31 @@ from cipher import *
 
 
 class Ui_MainWindow(object):
-    cipher = Vigenere()
-    cipher_list = [
-        cipher,
-        Playfair(),
-        cipher,
-        cipher,
-        cipher,
-        cipher,
+    def __init__(self):
+        self.cipher = Vigenere()
+        self.cipher_list = [
+            self.cipher,
+            Playfair(),
+            self.cipher,
+            self.cipher,
+            self.cipher,
+            self.cipher,
 
-        # Affine(),
-        # Hill(), Enigma(),
-        # SuperEncrypt()
-    ]
+            # Affine(),
+            # Hill(), Enigma(),
+            # SuperEncrypt()
+        ]
 
     def setupUi(self, MainWindow: QtWidgets.QMainWindow):
+
+        screen: QtGui.QScreen = MainWindow.screen()
+        width = int(screen.size().width() / 2)
+        height = int(screen.size().height() / 2.7)
+
         MainWindow.setObjectName("MainWindow")
         MainWindow.setWindowTitle("Cipher Simulator")
-        MainWindow.resize(1000, 400)
+
+        MainWindow.resize(width, height)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred,
                                            QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -37,7 +44,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(
             MainWindow.sizePolicy().hasHeightForWidth())
         MainWindow.setSizePolicy(sizePolicy)
-        MainWindow.setMinimumSize(QtCore.QSize(1000, 400))
+        MainWindow.setMinimumSize(QtCore.QSize(width, height))
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.centralwidget)
@@ -61,7 +68,7 @@ class Ui_MainWindow(object):
         self.groupBox.setObjectName("groupBox")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.groupBox)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.plainText = QtWidgets.QTextEdit(self.groupBox)
+        self.plainText = QtWidgets.QPlainTextEdit(self.groupBox)
         self.plainText.setObjectName("plainText")
         self.verticalLayout.addWidget(self.plainText)
         self.encryptButton = QtWidgets.QPushButton(self.groupBox)
@@ -70,17 +77,45 @@ class Ui_MainWindow(object):
                                       QtCore.Qt.AlignHCenter)
         self.horizontalLayout.addWidget(self.groupBox)
         self.horizontalLayout_4.addLayout(self.horizontalLayout)
-        self.groupBox_2 = QtWidgets.QGroupBox(self.centralwidget)
-        self.groupBox_2.setMinimumSize(QtCore.QSize(300, 0))
-        self.groupBox_2.setMaximumSize(QtCore.QSize(300, 400))
-        self.groupBox_2.setBaseSize(QtCore.QSize(0, 0))
-        self.groupBox_2.setAlignment(QtCore.Qt.AlignLeading
-                                     | QtCore.Qt.AlignLeft
-                                     | QtCore.Qt.AlignVCenter)
-        self.groupBox_2.setObjectName("groupBox_2")
-        self.gridLayout = QtWidgets.QGridLayout(self.groupBox_2)
+        self.cipherGroupBox = QtWidgets.QGroupBox(self.centralwidget)
+        self.cipherGroupBox.setMinimumSize(QtCore.QSize(300, 0))
+        self.cipherGroupBox.setMaximumSize(QtCore.QSize(300, 400))
+        self.cipherGroupBox.setBaseSize(QtCore.QSize(0, 0))
+        self.cipherGroupBox.setAlignment(QtCore.Qt.AlignLeading
+                                         | QtCore.Qt.AlignLeft
+                                         | QtCore.Qt.AlignVCenter)
+        self.cipherGroupBox.setObjectName("cipherGroupBox")
+        self.gridLayout = QtWidgets.QGridLayout(self.cipherGroupBox)
         self.gridLayout.setObjectName("gridLayout")
-        self.groupBox_6 = QtWidgets.QGroupBox(self.groupBox_2)
+        self.cipherWidget = QtWidgets.QWidget(self.cipherGroupBox)
+        self.cipherWidget.setObjectName("cipherWidget")
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.cipherWidget)
+        self.verticalLayout_4.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_4.setObjectName("verticalLayout_4")
+        self.groupBox_4 = QtWidgets.QGroupBox(self.cipherWidget)
+        self.groupBox_4.setObjectName("groupBox_4")
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.groupBox_4)
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.keyText = QtWidgets.QLineEdit(self.groupBox_4)
+        self.keyText.setObjectName("keyText")
+        self.horizontalLayout_3.addWidget(self.keyText)
+        self.verticalLayout_4.addWidget(self.groupBox_4)
+        self.groupBox_5 = QtWidgets.QGroupBox(self.cipherWidget)
+        self.groupBox_5.setObjectName("groupBox_5")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.groupBox_5)
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.autoKeyCheckBox = QtWidgets.QCheckBox(self.groupBox_5)
+        self.autoKeyCheckBox.setObjectName("autoKeyCheckBox")
+        self.verticalLayout_2.addWidget(self.autoKeyCheckBox)
+        self.fullModeCheckBox = QtWidgets.QCheckBox(self.groupBox_5)
+        self.fullModeCheckBox.setObjectName("fullModeCheckBox")
+        self.verticalLayout_2.addWidget(self.fullModeCheckBox)
+        self.asciiCheckBox = QtWidgets.QCheckBox(self.groupBox_5)
+        self.asciiCheckBox.setObjectName("asciiCheckBox")
+        self.verticalLayout_2.addWidget(self.asciiCheckBox)
+        self.verticalLayout_4.addWidget(self.groupBox_5)
+        self.gridLayout.addWidget(self.cipherWidget, 2, 2, 1, 1)
+        self.groupBox_6 = QtWidgets.QGroupBox(self.cipherGroupBox)
         self.groupBox_6.setObjectName("groupBox_6")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.groupBox_6)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
@@ -94,29 +129,7 @@ class Ui_MainWindow(object):
         self.cipherChooser.addItem("")
         self.horizontalLayout_2.addWidget(self.cipherChooser)
         self.gridLayout.addWidget(self.groupBox_6, 1, 2, 1, 1)
-        self.groupBox_4 = QtWidgets.QGroupBox(self.groupBox_2)
-        self.groupBox_4.setObjectName("groupBox_4")
-        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.groupBox_4)
-        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.lineEdit = QtWidgets.QLineEdit(self.groupBox_4)
-        self.lineEdit.setObjectName("lineEdit")
-        self.horizontalLayout_3.addWidget(self.lineEdit)
-        self.gridLayout.addWidget(self.groupBox_4, 2, 2, 1, 1)
-        self.groupBox_5 = QtWidgets.QGroupBox(self.groupBox_2)
-        self.groupBox_5.setObjectName("groupBox_5")
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.groupBox_5)
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.autoKeyCheckBox = QtWidgets.QCheckBox(self.groupBox_5)
-        self.autoKeyCheckBox.setObjectName("autoKeyCheckBox")
-        self.verticalLayout_2.addWidget(self.autoKeyCheckBox)
-        self.fullModeCheckBox = QtWidgets.QCheckBox(self.groupBox_5)
-        self.fullModeCheckBox.setObjectName("fullModeCheckBox")
-        self.verticalLayout_2.addWidget(self.fullModeCheckBox)
-        self.asciiCheckBox = QtWidgets.QCheckBox(self.groupBox_5)
-        self.asciiCheckBox.setObjectName("asciiCheckBox")
-        self.verticalLayout_2.addWidget(self.asciiCheckBox)
-        self.gridLayout.addWidget(self.groupBox_5, 3, 2, 1, 1)
-        self.horizontalLayout_4.addWidget(self.groupBox_2)
+        self.horizontalLayout_4.addWidget(self.cipherGroupBox)
         self.groupBox_3 = QtWidgets.QGroupBox(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred,
                                            QtWidgets.QSizePolicy.Expanding)
@@ -169,20 +182,7 @@ class Ui_MainWindow(object):
         self.encryptButton.setToolTip(
             _translate("MainWindow", "Encrypt the plain text"))
         self.encryptButton.setText(_translate("MainWindow", "Encrypt"))
-        self.groupBox_2.setTitle(_translate("MainWindow", "Cipher"))
-        self.groupBox_6.setTitle(_translate("MainWindow", "GroupBox"))
-        self.cipherChooser.setItemText(
-            0, _translate("MainWindow", "Vigènere Cipher"))
-        self.cipherChooser.setItemText(
-            1, _translate("MainWindow", "Playfair Cipher"))
-        self.cipherChooser.setItemText(
-            2, _translate("MainWindow", "Affine Cipher"))
-        self.cipherChooser.setItemText(3,
-                                       _translate("MainWindow", "Hill Cipher"))
-        self.cipherChooser.setItemText(
-            4, _translate("MainWindow", "Enigma Cipher"))
-        self.cipherChooser.setItemText(
-            5, _translate("MainWindow", "Super Encrypt Cipher"))
+        self.cipherGroupBox.setTitle(_translate("MainWindow", "Cipher"))
         self.groupBox_4.setToolTip(
             _translate("MainWindow", "Specify Vigènere key"))
         self.groupBox_4.setTitle(_translate("MainWindow", "Key"))
@@ -198,6 +198,19 @@ class Ui_MainWindow(object):
         self.asciiCheckBox.setToolTip(
             _translate("MainWindow", "Include all ASCII character"))
         self.asciiCheckBox.setText(_translate("MainWindow", "All ASCII"))
+        self.groupBox_6.setTitle(_translate("MainWindow", "GroupBox"))
+        self.cipherChooser.setItemText(
+            0, _translate("MainWindow", "Vigènere Cipher"))
+        self.cipherChooser.setItemText(
+            1, _translate("MainWindow", "Playfair Cipher"))
+        self.cipherChooser.setItemText(
+            2, _translate("MainWindow", "Affine Cipher"))
+        self.cipherChooser.setItemText(3,
+                                       _translate("MainWindow", "Hill Cipher"))
+        self.cipherChooser.setItemText(
+            4, _translate("MainWindow", "Enigma Cipher"))
+        self.cipherChooser.setItemText(
+            5, _translate("MainWindow", "Super Encrypt Cipher"))
         self.groupBox_3.setTitle(_translate("MainWindow", "Cipher Text"))
         self.decryptButton.setToolTip(
             _translate("MainWindow", "Decrypt the plain text"))
