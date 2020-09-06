@@ -8,7 +8,7 @@ from .base import Base
 class Vigenere(Base):
     matrix = list()
 
-    def encrypt(self, plain_text: str, auto_key: bool = false, *args, **kwargs) -> str:
+    def encrypt(self, plain_text: str, auto_key: bool = False, *args, **kwargs) -> str:
         list_int_plain_text = Base.str_to_list_int(plain_text, *args, **kwargs)
 
         if(auto_key):

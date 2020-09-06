@@ -44,7 +44,7 @@ class Hill:
         matrix_key = np.array([list_int_key[i:i+self.m_linear] for i in range (0, len(list_int_key), self.m_linear)])
 
         determinant = int(np.linalg.det(matrix_key))
-        if(determinant == 0 or not Base.isCoprime(determinant, NUMBER_OF_ALPHABET)):
+        if(determinant == 0 or not Base.isCoprime(abs(determinant), NUMBER_OF_ALPHABET)):
             raise Exception("TEXT CAN NOT BE DECRYPTED, TRY ANOTHER KEY")
         
         inverse_matrix_key =  (np.round_((np.linalg.inv(matrix_key) *determinant) * Base.modInverse(determinant, NUMBER_OF_ALPHABET))).astype(int) % NUMBER_OF_ALPHABET
