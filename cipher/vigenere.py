@@ -215,8 +215,8 @@ class Vigenere(Base):
             )
 
             if outputFile:
-                fileSize = os.stat(fileName).st_size
-                nLoop = ceil(fileSize / OFFSET)
+                # fileSize = os.stat(fileName).st_size
+                # nLoop = ceil(fileSize / OFFSET)
                 binary = np.fromfile(fileName, dtype=np.uint8)
                 cipher_list_int = self._int_encrypt_(binary,
                                                      self.keyText.text())
@@ -239,10 +239,11 @@ class Vigenere(Base):
                 "All Files (*)",
             )
             if outputFile:
-                fileSize = os.stat(fileName).st_size
-                nLoop = ceil(fileSize / OFFSET)
+                # fileSize = os.stat(fileName).st_size
+                # nLoop = ceil(fileSize / OFFSET)
                 binary = np.fromfile(fileName, dtype=np.uint8)
                 plain_list_int = self._int_decrypt_(binary,
                                                     self.keyText.text())
                 arr = np.asarray(plain_list_int, dtype=np.uint8)
                 arr.tofile(outputFile)
+                print('done decrypt')
