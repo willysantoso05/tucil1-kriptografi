@@ -48,7 +48,7 @@ class Playfair(Base):
         if not self.set_key(self.keyText.text()):
             return ''
         plain_text = re.sub('j', 'i', plain_text)
-        plain_text = Base.remove_punctuation(plain_text)
+        plain_text = Base.remove_punctuation(plain_text.lower())
 
         for idx in range(1, len(plain_text), 2):
             # insert 'x' between same pair of char
@@ -91,7 +91,7 @@ class Playfair(Base):
         if not self.set_key(self.keyText.text()):
             return ''
         cipher_text = re.sub('j', 'i', cipher_text)
-        cipher_text = Base.remove_punctuation(cipher_text)
+        cipher_text = Base.remove_punctuation(cipher_text.lower())
 
         if len(cipher_text) % 2 == 1:
             # text length in odd
