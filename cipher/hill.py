@@ -14,9 +14,9 @@ class Hill(Base):
         super().__init__()
 
     def encrypt(self, plain_text: str, *args, **kwargs) -> str:
-        if(self.validate()):
+        if(self.validate(plain_text)):
             self.processingKey()
-            list_int_plain_text = Base.str_to_list_int(plain_text, *args, **kwargs)
+            list_int_plain_text = Base.str_to_list_int((Base.remove_punctuation(plain_text)).lower(), *args, **kwargs)
             list_int_key = Base.str_to_list_int(self.key, *args, **kwargs)
 
             #Convert into matrix
@@ -32,14 +32,26 @@ class Hill(Base):
                 for number in multiplication_result:
                     list_int_cipher_text.append(number % NUMBER_OF_ALPHABET)
 
-            return Base.list_int_to_str(list_int_cipher_text, *args, **kwargs)
+            #Readd non-alphabet characters
+            list_int_result_text = Base.str_to_list_int(plain_text.lower(), *args, **kwargs)
+            idx = 0
+            for i in range(len(list_int_result_text)):
+                if(list_int_result_text[i]>=0 and list_int_result_text[i]<26):
+                    list_int_result_text[i] = list_int_cipher_text[idx]
+                    idx += 1
+                
+            while(idx<len(list_int_cipher_text)):
+                list_int_result_text.append(list_int_cipher_text[idx])
+                idx += 1
+
+            return Base.list_int_to_str(list_int_result_text, *args, **kwargs)
         
         return ''
 
     def decrypt(self, cipher_text: str, *args, **kwargs) -> str:
-        if(self.validate()):
+        if(self.validate(cipher_text)):
             self.processingKey()
-            list_int_cipher_text = Base.str_to_list_int(cipher_text, *args, **kwargs)
+            list_int_cipher_text = Base.str_to_list_int((Base.remove_punctuation(cipher_text)).lower(), *args, **kwargs)
             list_int_key = Base.str_to_list_int(self.key, *args, **kwargs)
 
             #Convert into matrix
@@ -61,15 +73,26 @@ class Hill(Base):
                 for number in multiplication_result:
                     list_int_plain_text.append(number % NUMBER_OF_ALPHABET)
 
+            # list_int_result_text = Base.str_to_list_int(cipher_text.lower(), *args, **kwargs)
+            # idx = 0
+            # for i in range(len(list_int_result_text)):
+            #     if(list_int_result_text[i]>=0 and list_int_result_text[i]<26):
+            #         list_int_result_text[i] = list_int_plain_text[idx]
+            #         idx += 1
+
             return Base.list_int_to_str(list_int_plain_text, *args, **kwargs)
 
         return ''
 
-    def validate(self) -> bool:
+    def validate(self, inputText:str) -> bool:
+        #Validate:
+        #1. Key must not be an empty string
+        #2. M_linear must be an integer
+        #3. inputText must not be empty
         self.key = Base.remove_punctuation(self.keyInput.text())
         self.m_linear = Base.remove_punctuation(self.key_M_Input.text(), '[^0-9]')
 
-        if(len(self.key)!=0 and len(self.m_linear)!=0 and self.m_linear!='0'):
+        if(len(self.key)!=0 and len(self.m_linear)!=0 and self.m_linear!='0' and len(inputText)!=0):
             try:
                 m_linear = int(self.m_linear)
                 return True

@@ -13,28 +13,32 @@ class SuperEncrypt(Vigenere):
         super().__init__()
 
     def encrypt(self, plain_text: str, *args, **kwargs) -> str:
-        if(self.validate()):
-            x = len(plain_text) % int(self.k_transpose)
+        print(plain_text)
+        text = Base.remove_punctuation(plain_text.lower())
+        if(self.validate(text)):
+            print("VALIDATED")
+            x = len(text) % int(self.k_transpose)
             if(x != 0):
-                plain_text += (int(self.k_transpose) - x) * 'z'   #add Z character
+                text += (int(self.k_transpose) - x) * 'z'   #add Z character
 
-            vigenere_text = super().encrypt(plain_text)
+            vigenere_text = super().encrypt(text)
+            print(vigenere_text)
             return self.transpose(vigenere_text)
         return ''
 
-
     def decrypt(self, cipher_text: str, *args, **kwargs) -> str:
-        if(self.validate()):
-            transpose_text = self.transpose(cipher_text)
-            cipher_text = super().decrypt(transpose_text)
-            return cipher_text
+        text = Base.remove_punctuation(cipher_text.lower())
+        if(self.validate(text)):
+            transpose_text = self.transpose(text)
+            plain_text = super().decrypt(transpose_text)
+            return plain_text
         return ''
 
-    def validate(self):
+    def validate(self, inputText:str):
         self.key = Base.remove_punctuation(self.keyText.text())
         self.k_transpose = Base.remove_punctuation(self.K_Transpose_Input.text(), '[^0-9]')
 
-        if(len(self.key)!=0 and len(self.k_transpose)!=0 and self.k_transpose!='0'):
+        if(len(self.key)!=0 and len(self.k_transpose)!=0 and self.k_transpose!='0' and len(inputText)!=0):
             try:
                 k_transpose = int(self.k_transpose)
                 return True
