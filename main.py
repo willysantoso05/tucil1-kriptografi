@@ -130,10 +130,13 @@ class Ui_MainWindow(object):
         self.groupBox_3.setObjectName("groupBox_3")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.groupBox_3)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
-        self.space = QtWidgets.QRadioButton(self.groupBox_3)
-        self.space.setChecked(True)
-        self.space.setObjectName("space")
-        self.verticalLayout_3.addWidget(self.space)
+        self.normalSpace = QtWidgets.QRadioButton(self.groupBox_3)
+        self.normalSpace.setChecked(True)
+        self.normalSpace.setObjectName("normalSpace")
+        self.verticalLayout_3.addWidget(self.normalSpace)
+        self.noSpace = QtWidgets.QRadioButton(self.groupBox_3)
+        self.noSpace.setObjectName("noSpace")
+        self.verticalLayout_3.addWidget(self.noSpace)
         self.fiveLetters = QtWidgets.QRadioButton(self.groupBox_3)
         self.fiveLetters.setObjectName("fiveLetters")
         self.verticalLayout_3.addWidget(self.fiveLetters)
@@ -167,7 +170,8 @@ class Ui_MainWindow(object):
         self.decryptButton.clicked.connect(self.decrypt_clicked)
         self.cipherChooser.currentIndexChanged.connect(self.change_cipher)
 
-        self.space.toggled.connect(self.groupInOne)
+        self.normalSpace.toggled.connect(self.groupWithNormalSpace)
+        self.noSpace.toggled.connect(self.groupInOne)
         self.fiveLetters.toggled.connect(self.groupInFive)
 
         self.actionOpen.triggered.connect(self.openFile)
@@ -197,7 +201,8 @@ class Ui_MainWindow(object):
         self.cipherChooser.setItemText(
             5, _translate("MainWindow", "Super Encrypt Cipher"))
         self.groupBox_3.setTitle(_translate("MainWindow", "Output Text"))
-        self.space.setText(_translate("MainWindow", "Without space"))
+        self.normalSpace.setText(_translate("MainWindow", "Normal space"))
+        self.noSpace.setText(_translate("MainWindow", "Without space"))
         self.fiveLetters.setText(_translate("MainWindow",
                                             "Group in 5 letters"))
         self.decryptButton.setToolTip(
@@ -216,7 +221,9 @@ class Ui_MainWindow(object):
     def encrypt_clicked(self):
         input_text = self.plainText.toPlainText()
         self.cipher_text = self.cipher.encrypt(input_text)
-        if (self.space.isChecked()):
+        if (self.normalSpace.isChecked()):
+            self.groupWithNormalSpace()
+        elif(self.noSpace.isChecked()):
             self.groupInOne()
         else:
             self.groupInFive()
@@ -224,7 +231,9 @@ class Ui_MainWindow(object):
     def decrypt_clicked(self):
         input_text = self.plainText.toPlainText()
         self.cipher_text = self.cipher.decrypt(input_text)
-        if (self.space.isChecked()):
+        if(self.normalSpace.isChecked()):
+            self.groupWithNormalSpace()
+        elif (self.noSpace.isChecked()):
             self.groupInOne()
         else:
             self.groupInFive()
@@ -251,6 +260,9 @@ class Ui_MainWindow(object):
         self.cipherText.setPlainText(resultText)
 
     def groupInOne(self):
+        self.cipherText.setPlainText((self.cipher_text).replace(' ', ''))
+
+    def groupWithNormalSpace(self):
         self.cipherText.setPlainText(self.cipher_text)
 
     def openFile(self):
@@ -274,7 +286,6 @@ class Ui_MainWindow(object):
         if fileName:
             with open(fileName, 'w') as f:
                 f.write(self.cipherText.toPlainText())
-
 
 if __name__ == "__main__":
     import sys
