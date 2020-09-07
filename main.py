@@ -9,7 +9,7 @@ class Ui_MainWindow(object):
             Vigenere(),
             Playfair(),
             Affine(),
-            Hill(), 
+            Hill(),
             Enigma(),
             SuperEncrypt()
         ]
@@ -65,10 +65,12 @@ class Ui_MainWindow(object):
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.encryptButton = QtWidgets.QPushButton(self.groupBox)
         self.encryptButton.setObjectName("encryptButton")
-        self.horizontalLayout.addWidget(self.encryptButton, 0, QtCore.Qt.AlignHCenter)
+        self.horizontalLayout.addWidget(self.encryptButton, 0,
+                                        QtCore.Qt.AlignHCenter)
         self.decryptButton = QtWidgets.QPushButton(self.groupBox)
         self.decryptButton.setObjectName("decryptButton")
-        self.horizontalLayout.addWidget(self.decryptButton, 0, QtCore.Qt.AlignHCenter)
+        self.horizontalLayout.addWidget(self.decryptButton, 0,
+                                        QtCore.Qt.AlignHCenter)
         self.verticalLayout.addLayout(self.horizontalLayout)
         # self.verticalLayout.addWidget(self.plainText)
         # self.encryptButton = QtWidgets.QPushButton(self.groupBox)
@@ -84,7 +86,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(
-            self.cipherGroupBox.sizePolicy().hasHeightForWidth())   
+            self.cipherGroupBox.sizePolicy().hasHeightForWidth())
         self.cipherGroupBox.setSizePolicy(sizePolicy)
         self.cipherGroupBox.setMinimumSize(QtCore.QSize(300, 0))
         self.cipherGroupBox.setMaximumSize(QtCore.QSize(300, 400))
@@ -124,7 +126,8 @@ class Ui_MainWindow(object):
         self.cipherChooser.addItem("")
         self.horizontalLayout_2.addWidget(self.cipherChooser)
         self.gridLayout.addWidget(self.groupBox_6, 1, 2, 1, 1)
-        self.horizontalLayout_4.addWidget(self.cipherGroupBox,  0, QtCore.Qt.AlignVCenter)
+        self.horizontalLayout_4.addWidget(self.cipherGroupBox, 0,
+                                          QtCore.Qt.AlignVCenter)
         self.groupBox_3 = QtWidgets.QGroupBox(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred,
                                            QtWidgets.QSizePolicy.Expanding)
@@ -190,8 +193,8 @@ class Ui_MainWindow(object):
         self.encryptButton.setToolTip(
             _translate("MainWindow", "Encrypt the plain text"))
         self.encryptButton.setText(_translate("MainWindow", "Encrypt"))
-        self.cipherGroupBox.setTitle(_translate("MainWindow", "Cipher"))     
-        
+        self.cipherGroupBox.setTitle(_translate("MainWindow", "Cipher"))
+
         self.groupBox_6.setTitle(_translate("MainWindow", "GroupBox"))
         self.cipherChooser.setItemText(
             0, _translate("MainWindow", "Vigènere Cipher"))
@@ -199,15 +202,16 @@ class Ui_MainWindow(object):
             1, _translate("MainWindow", "Playfair Cipher"))
         self.cipherChooser.setItemText(
             2, _translate("MainWindow", "Affine Cipher"))
-        self.cipherChooser.setItemText(
-            3, _translate("MainWindow", "Hill Cipher"))
+        self.cipherChooser.setItemText(3,
+                                       _translate("MainWindow", "Hill Cipher"))
         self.cipherChooser.setItemText(
             4, _translate("MainWindow", "Enigma Cipher"))
         self.cipherChooser.setItemText(
             5, _translate("MainWindow", "Super Encrypt Cipher"))
         self.groupBox_3.setTitle(_translate("MainWindow", "Output Text"))
         self.space.setText(_translate("MainWindow", "Without space"))
-        self.fiveLetters.setText(_translate("MainWindow", "Group in 5 letters"))
+        self.fiveLetters.setText(_translate("MainWindow",
+                                            "Group in 5 letters"))
         self.decryptButton.setToolTip(
             _translate("MainWindow", "Decrypt the plain text"))
         self.decryptButton.setText(_translate("MainWindow", "Decrypt"))
@@ -224,7 +228,7 @@ class Ui_MainWindow(object):
     def encrypt_clicked(self):
         input_text = self.plainText.toPlainText()
         self.cipher_text = self.cipher.encrypt(input_text)
-        if(self.space.isChecked()):
+        if (self.space.isChecked()):
             self.groupInOne()
         else:
             self.groupInFive()
@@ -232,7 +236,7 @@ class Ui_MainWindow(object):
     def decrypt_clicked(self):
         input_text = self.plainText.toPlainText()
         self.cipher_text = self.cipher.decrypt(input_text)
-        if(self.space.isChecked()):
+        if (self.space.isChecked()):
             self.groupInOne()
         else:
             self.groupInFive()
@@ -249,15 +253,19 @@ class Ui_MainWindow(object):
     def change_cipher(self, idx: int):
         self.clean(self.verticalLayout_4)
         self.cipher = self.cipher_list[idx]
-        print(self.cipher)
+        # print(self.cipher)
         self.cipher.render(self)
 
     def groupInFive(self):
-        resultText = ' '.join([self.cipher_text[idx:idx+5] for idx in range(0,len(self.cipher_text), 5) ])
+        resultText = ' '.join([
+            self.cipher_text[idx:idx + 5]
+            for idx in range(0, len(self.cipher_text), 5)
+        ])
         self.cipherText.setPlainText(resultText)
 
     def groupInOne(self):
         self.cipherText.setPlainText(self.cipher_text)
+
 
 if __name__ == "__main__":
     import sys
