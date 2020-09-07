@@ -1,9 +1,11 @@
+import re
 from collections import OrderedDict
 from math import sqrt
-import re
+
+from PyQt5 import QtCore, QtWidgets
 
 from main import Ui_MainWindow
-from PyQt5 import QtCore, QtWidgets
+
 from .base import Base
 
 DEFAULT_KEY = 'abcdefghiklmnopqrstuvwxyz'
@@ -12,12 +14,12 @@ DEFAULT_WIDTH = 5
 
 class Playfair(Base):
     def set_key(self, key):
+        key = Base.remove_punctuation(key)
+        key = re.sub('j', '', key)
+        key += DEFAULT_KEY
+        key = ''.join(OrderedDict.fromkeys(key).keys())
         self.key = key
-        self.key = Base.remove_punctuation(self.key)
-        self.key = re.sub('j', '', self.key)
-        self.key += DEFAULT_KEY
-        self.key = ''.join(OrderedDict.fromkeys(self.key).keys())
-        assert (len(self.key) == 25)
+        return (len(key) == 25)
 
     def _encrypt_pair_(self, a: str, b: str) -> str:
         row_a, col_a = divmod(self.key.index(a), DEFAULT_WIDTH)
@@ -43,6 +45,8 @@ class Playfair(Base):
         return cipher_a + cipher_b
 
     def encrypt(self, plain_text: str, *args, **kwargs) -> str:
+        if not self.set_key(self.keyText.text()):
+            return ''
         plain_text = re.sub('j', 'i', plain_text)
         plain_text = Base.remove_punctuation(plain_text)
 
@@ -84,6 +88,8 @@ class Playfair(Base):
         return cipher_a + cipher_b
 
     def decrypt(self, cipher_text: str, *args, **kwargs) -> str:
+        if not self.set_key(self.keyText.text()):
+            return ''
         cipher_text = re.sub('j', 'i', cipher_text)
         cipher_text = Base.remove_punctuation(cipher_text)
 
@@ -103,12 +109,13 @@ class Playfair(Base):
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.groupBox_4)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.keyText = QtWidgets.QLineEdit(self.groupBox_4)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding,
+                                           QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.keyText.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(
+            self.keyText.sizePolicy().hasHeightForWidth())
         self.keyText.setSizePolicy(sizePolicy)
-        self.keyText.setText("")
         self.keyText.setObjectName("keyText")
         self.horizontalLayout_3.addWidget(self.keyText)
         window.verticalLayout_4.addWidget(self.groupBox_4)
@@ -117,5 +124,6 @@ class Playfair(Base):
 
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
-        self.groupBox_4.setToolTip(_translate("MainWindow", "Specify Vigènere key"))
+        self.groupBox_4.setToolTip(
+            _translate("MainWindow", "Specify Playfair key"))
         self.groupBox_4.setTitle(_translate("MainWindow", "Key"))
