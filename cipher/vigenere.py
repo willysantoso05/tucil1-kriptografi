@@ -20,11 +20,14 @@ class Vigenere(Base):
     def encrypt(self, plain_text: str, *args, **kwargs) -> str:
         if not self.ascii:
             key_now = Base.remove_punctuation(self.keyText.text())
-            self.keyText.setText(key_now)
+            plain_text = Base.remove_punctuation(plain_text.lower())
         else:
             key_now = self.keyText.text()
 
         list_int_plain_text = Base.str_to_list_int(plain_text, base=self.base)
+
+        if (self.auto_key):
+            key_now += plain_text
 
         list_int_key = Base.str_to_list_int(key_now, base=self.base)
 
@@ -47,10 +50,18 @@ class Vigenere(Base):
 
         list_int_key = Base.str_to_list_int(key_now, base=self.base)
 
-        list_int_plain_text = [
-            self.matrix[key].index(num)
-            for key, num in zip(cycle(list_int_key), list_int_cipher_text)
-        ]
+        if self.auto_key:
+            list_int_plain_text = []
+            for idx, num in enumerate(list_int_cipher_text):
+                key = list_int_key[idx]
+                plain_int = self.matrix[key].index(num)
+                list_int_plain_text.append(plain_int)
+                list_int_key.append(plain_int)
+        else:
+            list_int_plain_text = [
+                self.matrix[key].index(num)
+                for key, num in zip(cycle(list_int_key), list_int_cipher_text)
+            ]
 
         return Base.list_int_to_str(list_int_plain_text, base=self.base)
 
@@ -131,15 +142,57 @@ class Vigenere(Base):
         self.ascii = bool(state)
         self.set_matrix()
 
+        if self.ascii:
+            self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
+            self.horizontalLayout_3.setContentsMargins(-1, -1, -1, 0)
+            self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+            self.encryptFileButton = QtWidgets.QPushButton(
+                self.window.cipherWidget)
+            self.encryptFileButton.setObjectName("encryptFileButton")
+            self.horizontalLayout_3.addWidget(self.encryptFileButton, 0,
+                                              QtCore.Qt.AlignHCenter)
+            self.decryptFileButton = QtWidgets.QPushButton(
+                self.window.cipherWidget)
+            self.decryptFileButton.setObjectName("decryptFileButton")
+            self.horizontalLayout_3.addWidget(self.decryptFileButton, 0,
+                                              QtCore.Qt.AlignHCenter)
+            self.window.verticalLayout_4.addLayout(self.horizontalLayout_3)
+
+            self.encryptFileButton.setText("Encrypt File")
+            self.decryptFileButton.setText("Decrypt File")
+
+            self.encryptFileButton.clicked.connect(self.encryptFile)
+            self.decryptFileButton.clicked.connect(self.decryptFile)
+        else:
+            self.window.clean(self.horizontalLayout_3)
+
     def full_mode(self, state):
         self.random = bool(state)
         self.set_matrix()
 
     def auto_key_mode(self, state):
-        if bool(state):
-            self.key = self.keyText.text()
-            self.keyText.setText(
-                (self.key + self.window.plainText.toPlainText()
-                 )[:len(self.window.plainText.toPlainText())])
-        else:
-            self.keyText.setText(self.key)
+        self.auto_key = bool(state)
+
+    def encryptFile(self):
+        fileName, _ = QtWidgets.QFileDialog.getOpenFileName(
+            None,
+            "Select Input File",
+            "",
+            "All Files (*)",
+        )
+        print(fileName)
+        # if fileName:
+        #     with open(fileName, 'r') as f:
+        #         self.plainText.setPlainText(f.read())
+
+    def decryptFile(self):
+        fileName, _ = QtWidgets.QFileDialog.getOpenFileName(
+            None,
+            "Select Input File",
+            "",
+            "All Files (*)",
+        )
+        print(fileName)
+        # if fileName:
+        #     with open(fileName, 'r') as f:
+        #         self.plainText.setPlainText(f.read())
