@@ -39,11 +39,6 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.centralwidget)
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
-        # self.horizontalLayout = QtWidgets.QHBoxLayout()
-        # self.horizontalLayout.setSizeConstraint(
-        #     QtWidgets.QLayout.SetMinAndMaxSize)
-        # self.horizontalLayout.setContentsMargins(-1, -1, -1, 0)
-        # self.horizontalLayout.setObjectName("horizontalLayout")
         self.groupBox = QtWidgets.QGroupBox(self.centralwidget)
         self.groupBox.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred,
@@ -73,14 +68,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addWidget(self.decryptButton, 0,
                                         QtCore.Qt.AlignHCenter)
         self.verticalLayout.addLayout(self.horizontalLayout)
-        # self.verticalLayout.addWidget(self.plainText)
-        # self.encryptButton = QtWidgets.QPushButton(self.groupBox)
-        # self.encryptButton.setObjectName("encryptButton")
-        # self.verticalLayout.addWidget(self.encryptButton, 0,
-        #                               QtCore.Qt.AlignHCenter)
-        # self.horizontalLayout.addWidget(self.groupBox)
         self.horizontalLayout_4.addWidget(self.groupBox)
-        # self.horizontalLayout_4.addLayout(self.horizontalLayout)
         self.cipherGroupBox = QtWidgets.QGroupBox(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred,
                                            QtWidgets.QSizePolicy.Maximum)
@@ -153,10 +141,6 @@ class Ui_MainWindow(object):
         self.cipherText.setObjectName("cipherText")
         self.cipherText.setReadOnly(True)
         self.verticalLayout_3.addWidget(self.cipherText)
-        # self.decryptButton = QtWidgets.QPushButton(self.groupBox_3)
-        # self.decryptButton.setObjectName("decryptButton")
-        # self.verticalLayout_3.addWidget(self.decryptButton, 0,
-        #                                 QtCore.Qt.AlignHCenter)
         self.horizontalLayout_4.addWidget(self.groupBox_3)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -185,6 +169,9 @@ class Ui_MainWindow(object):
 
         self.space.toggled.connect(self.groupInOne)
         self.fiveLetters.toggled.connect(self.groupInFive)
+
+        self.actionOpen.triggered.connect(self.openFile)
+        self.actionSave.triggered.connect(self.saveFile)
 
         self.cipher.render(self)
 
@@ -219,11 +206,11 @@ class Ui_MainWindow(object):
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.actionOpen.setText(_translate("MainWindow", "Open"))
         self.actionOpen.setStatusTip(
-            _translate("MainWindow", "Open file to encrypt"))
+            _translate("MainWindow", "Open input file as text"))
         self.actionOpen.setShortcut(_translate("MainWindow", "Ctrl+O"))
         self.actionSave.setText(_translate("MainWindow", "Save"))
         self.actionSave.setStatusTip(
-            _translate("MainWindow", "Save ciphertext"))
+            _translate("MainWindow", "Save output file"))
         self.actionSave.setShortcut(_translate("MainWindow", "Ctrl+S"))
 
     def encrypt_clicked(self):
@@ -254,7 +241,6 @@ class Ui_MainWindow(object):
     def change_cipher(self, idx: int):
         self.clean(self.verticalLayout_4)
         self.cipher = self.cipher_list[idx]
-        # print(self.cipher)
         self.cipher.render(self)
 
     def groupInFive(self):
@@ -266,6 +252,28 @@ class Ui_MainWindow(object):
 
     def groupInOne(self):
         self.cipherText.setPlainText(self.cipher_text)
+
+    def openFile(self):
+        fileName, _ = QtWidgets.QFileDialog.getOpenFileName(
+            None,
+            "Select Input File",
+            "",
+            "All Files (*)",
+        )
+        if fileName:
+            with open(fileName, 'r') as f:
+                self.plainText.setPlainText(f.read())
+
+    def saveFile(self):
+        fileName, _ = QtWidgets.QFileDialog.getSaveFileName(
+            None,
+            "Select File to Save Output Text",
+            "",
+            "All Files (*)",
+        )
+        if fileName:
+            with open(fileName, 'w') as f:
+                f.write(self.cipherText.toPlainText())
 
 
 if __name__ == "__main__":
