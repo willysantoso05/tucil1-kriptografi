@@ -1,3 +1,5 @@
+import mimetypes
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from cipher import *
@@ -273,8 +275,11 @@ class Ui_MainWindow(object):
             "All Files (*)",
         )
         if fileName:
-            with open(fileName, 'r') as f:
-                self.plainText.setPlainText(f.read())
+            mime = mimetypes.guess_type(fileName)
+            print(mime)
+            if mime[0] and mime[0].split('/')[0] == 'text':
+                with open(fileName, 'r') as f:
+                    self.plainText.setPlainText(f.read())
 
     def saveFile(self):
         fileName, _ = QtWidgets.QFileDialog.getSaveFileName(
