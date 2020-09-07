@@ -73,14 +73,14 @@ class Hill(Base):
                 for number in multiplication_result:
                     list_int_plain_text.append(number % NUMBER_OF_ALPHABET)
 
-            # list_int_result_text = Base.str_to_list_int(cipher_text.lower(), *args, **kwargs)
-            # idx = 0
-            # for i in range(len(list_int_result_text)):
-            #     if(list_int_result_text[i]>=0 and list_int_result_text[i]<26):
-            #         list_int_result_text[i] = list_int_plain_text[idx]
-            #         idx += 1
+            list_int_result_text = Base.str_to_list_int(cipher_text.lower(), *args, **kwargs)
+            idx = 0
+            for i in range(len(list_int_result_text)):
+                if(list_int_result_text[i]>=0 and list_int_result_text[i]<26):
+                    list_int_result_text[i] = list_int_plain_text[idx]
+                    idx += 1
 
-            return Base.list_int_to_str(list_int_plain_text, *args, **kwargs)
+            return Base.list_int_to_str(list_int_result_text, *args, **kwargs)
 
         return ''
 

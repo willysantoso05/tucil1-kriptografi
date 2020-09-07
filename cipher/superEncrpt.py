@@ -13,16 +13,13 @@ class SuperEncrypt(Vigenere):
         super().__init__()
 
     def encrypt(self, plain_text: str, *args, **kwargs) -> str:
-        print(plain_text)
         text = Base.remove_punctuation(plain_text.lower())
         if(self.validate(text)):
-            print("VALIDATED")
             x = len(text) % int(self.k_transpose)
             if(x != 0):
                 text += (int(self.k_transpose) - x) * 'z'   #add Z character
 
             vigenere_text = super().encrypt(text)
-            print(vigenere_text)
             return self.transpose(vigenere_text)
         return ''
 
@@ -81,6 +78,9 @@ class SuperEncrypt(Vigenere):
         window.verticalLayout_4.addWidget(self.groupBox_5)
 
         self.retranslateUi()
+
+        self.autoKeyCheckBox.stateChanged.connect(self.auto_key_mode)
+        self.fullModeCheckBox.stateChanged.connect(self.full_mode)
 
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
