@@ -60,9 +60,9 @@ class Hill(Base):
                 matrix_int_cipher_text[-1].append(25)    #add Z character if text mod m != 0
             matrix_key = np.array([list_int_key[i:i+int(self.m_linear)] for i in range (0, len(list_int_key), int(self.m_linear))])
 
-            determinant = int(np.linalg.det(matrix_key))
+            determinant = int(round(np.linalg.det(matrix_key)))
             if(determinant == 0 or not Base.isCoprime(abs(determinant), NUMBER_OF_ALPHABET)):
-                raise Exception("TEXT CAN NOT BE DECRYPTED, TRY ANOTHER KEY")
+                return ''
             
             inverse_matrix_key =  (np.round_((np.linalg.inv(matrix_key) *determinant) * Base.modInverse(determinant, NUMBER_OF_ALPHABET))).astype(int) % NUMBER_OF_ALPHABET
 

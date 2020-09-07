@@ -32,6 +32,9 @@ class SuperEncrypt(Vigenere):
         return ''
 
     def validate(self, inputText:str):
+        #Validate:
+        #1. Key must not be an empty string [a-z]
+        #2. K_transpose must be an integer
         self.key = Base.remove_punctuation(self.keyText.text())
         self.k_transpose = Base.remove_punctuation(self.K_Transpose_Input.text(), '[^0-9]')
 
