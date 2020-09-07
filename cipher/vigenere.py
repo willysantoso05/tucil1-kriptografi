@@ -2,6 +2,7 @@ from itertools import cycle
 from random import shuffle
 from typing import List
 
+import numpy as np
 from PyQt5 import QtCore, QtWidgets
 
 from main import Ui_MainWindow
@@ -14,42 +15,58 @@ class Vigenere(Base):
         self.auto_key = False
         self.random = False
         self.ascii = False
+        self.base = ord('a')
         super().__init__()
         self.set_matrix()
 
     def encrypt(self, plain_text: str, *args, **kwargs) -> str:
         if not self.ascii:
-            key_now = Base.remove_punctuation(self.keyText.text())
+            key_now = Base.remove_punctuation(self.keyText.text().lower())
             plain_text = Base.remove_punctuation(plain_text.lower())
         else:
             key_now = self.keyText.text()
 
         list_int_plain_text = Base.str_to_list_int(plain_text, base=self.base)
+        list_int_cipher_text = self._int_encrypt_(list_int_plain_text, key_now)
+        return Base.list_int_to_str(list_int_cipher_text, base=self.base)
 
-        if (self.auto_key):
-            key_now += plain_text
+    def _int_encrypt_(self, list_int_plain_text: List[int],
+                      key_now: str) -> str:
 
         list_int_key = Base.str_to_list_int(key_now, base=self.base)
 
-        list_int_cipher_text = [
-            self.matrix[key][num]
-            for key, num in zip(cycle(list_int_key), list_int_plain_text)
-        ]
+        if (self.auto_key):
+            list_int_key += list_int_plain_text
 
-        return Base.list_int_to_str(list_int_cipher_text, base=self.base)
+        if self.ascii:
+            list_int_cipher_text = [
+                (num + key) % 256
+                for key, num in zip(cycle(list_int_key), list_int_plain_text)
+            ]
+        else:
+            list_int_cipher_text = [
+                self.matrix[key][num]
+                for key, num in zip(cycle(list_int_key), list_int_plain_text)
+            ]
+
+        return list_int_cipher_text
 
     def decrypt(self, cipher_text: str, *args, **kwargs) -> str:
         if not self.ascii:
-            key_now = Base.remove_punctuation(self.keyText.text())
+            key_now = Base.remove_punctuation(self.keyText.text().lower())
             cipher_text = Base.remove_punctuation(cipher_text.lower())
         else:
             key_now = self.keyText.text()
 
         list_int_cipher_text = Base.str_to_list_int(cipher_text,
                                                     base=self.base)
+        list_int_plain_text = self._int_decrypt_(list_int_cipher_text, key_now)
+        return Base.list_int_to_str(list_int_plain_text, base=self.base)
+
+    def _int_decrypt_(self, list_int_cipher_text: List[int],
+                      key_now: str) -> str:
 
         list_int_key = Base.str_to_list_int(key_now, base=self.base)
-
         if self.auto_key:
             if key_now == '':
                 return ''
@@ -57,16 +74,22 @@ class Vigenere(Base):
             list_int_plain_text = []
             for idx, num in enumerate(list_int_cipher_text):
                 key = list_int_key[idx]
-                plain_int = self.matrix[key].index(num)
+                if self.ascii:
+                    plain_int = (num - key) % 256
+                else:
+                    plain_int = self.matrix[key].index(num)
                 list_int_plain_text.append(plain_int)
                 list_int_key.append(plain_int)
         else:
-            list_int_plain_text = [
-                self.matrix[key].index(num)
-                for key, num in zip(cycle(list_int_key), list_int_cipher_text)
-            ]
-
-        return Base.list_int_to_str(list_int_plain_text, base=self.base)
+            if self.ascii:
+                list_int_plain_text = [(num - key) % 256 for key, num in zip(
+                    cycle(list_int_key), list_int_cipher_text)]
+            else:
+                list_int_plain_text = [
+                    self.matrix[key].index(num) for key, num in zip(
+                        cycle(list_int_key), list_int_cipher_text)
+                ]
+        return list_int_plain_text
 
     def set_matrix(self, shift: int = 1):
         '''Generate Vigenere Matrix
@@ -183,10 +206,23 @@ class Vigenere(Base):
             "",
             "All Files (*)",
         )
-        print(fileName)
-        # if fileName:
-        #     with open(fileName, 'r') as f:
-        #         self.plainText.setPlainText(f.read())
+        if fileName:
+            outputFile, _ = QtWidgets.QFileDialog.getSaveFileName(
+                None,
+                "Select File to Save the Output",
+                "",
+                "All Files (*)",
+            )
+
+            if outputFile:
+                fileSize = os.stat(fileName).st_size
+                nLoop = ceil(fileSize / OFFSET)
+                binary = np.fromfile(fileName, dtype=np.uint8)
+                cipher_list_int = self._int_encrypt_(binary,
+                                                     self.keyText.text())
+                arr = np.asarray(cipher_list_int, dtype=np.uint8)
+                arr.tofile(outputFile)
+                print('done encrypt')
 
     def decryptFile(self):
         fileName, _ = QtWidgets.QFileDialog.getOpenFileName(
@@ -195,7 +231,18 @@ class Vigenere(Base):
             "",
             "All Files (*)",
         )
-        print(fileName)
-        # if fileName:
-        #     with open(fileName, 'r') as f:
-        #         self.plainText.setPlainText(f.read())
+        if fileName:
+            outputFile, _ = QtWidgets.QFileDialog.getSaveFileName(
+                None,
+                "Select File to Save the Output",
+                "",
+                "All Files (*)",
+            )
+            if outputFile:
+                fileSize = os.stat(fileName).st_size
+                nLoop = ceil(fileSize / OFFSET)
+                binary = np.fromfile(fileName, dtype=np.uint8)
+                plain_list_int = self._int_decrypt_(binary,
+                                                    self.keyText.text())
+                arr = np.asarray(plain_list_int, dtype=np.uint8)
+                arr.tofile(outputFile)
