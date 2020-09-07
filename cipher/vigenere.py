@@ -41,7 +41,7 @@ class Vigenere(Base):
     def decrypt(self, cipher_text: str, *args, **kwargs) -> str:
         if not self.ascii:
             key_now = Base.remove_punctuation(self.keyText.text())
-            self.keyText.setText(key_now)
+            cipher_text = Base.remove_punctuation(cipher_text.lower())
         else:
             key_now = self.keyText.text()
 
@@ -51,6 +51,9 @@ class Vigenere(Base):
         list_int_key = Base.str_to_list_int(key_now, base=self.base)
 
         if self.auto_key:
+            if key_now == '':
+                return ''
+
             list_int_plain_text = []
             for idx, num in enumerate(list_int_cipher_text):
                 key = list_int_key[idx]
