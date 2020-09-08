@@ -14,7 +14,7 @@ DEFAULT_WIDTH = 5
 
 class Playfair(Base):
     def set_key(self, key):
-        key = Base.remove_punctuation(key)
+        key = Base.remove_punctuation(key.lower())
         key = re.sub('j', '', key)
         key += DEFAULT_KEY
         key = ''.join(OrderedDict.fromkeys(key).keys())
