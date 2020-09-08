@@ -50,19 +50,26 @@ class Playfair(Base):
         plain_text = re.sub('j', 'i', plain_text)
         plain_text = Base.remove_punctuation(plain_text.lower())
 
-        for idx in range(1, len(plain_text), 2):
-            # insert 'x' between same pair of char
-            if (plain_text[idx] == plain_text[idx - 1]):
-                plain_text = plain_text[:idx] + 'x' + plain_text[idx:]
+        temp_char = ''
 
-        if len(plain_text) % 2 == 1:
-            # text length in odd
-            plain_text += 'x'
+        cipher_text = []
+        for char in plain_text:
+            if temp_char:
+                if temp_char == char:
+                    cipher = self._encrypt_pair_(temp_char, 'x')
+                    temp_char = char
+                else:
+                    cipher = self._encrypt_pair_(temp_char, char)
+                    temp_char = ''
+                cipher_text.append(cipher)
+            else:
+                if char == plain_text[-1]:
+                    # last but not pair
+                    cipher_text.append(self._encrypt_pair_(char, 'x'))
+                else:
+                    temp_char = char
 
-        return ''.join([
-            self._encrypt_pair_(plain_text[idx], plain_text[idx + 1])
-            for idx in range(0, len(plain_text), 2)
-        ])
+        return ''.join(cipher_text)
 
     def _decrypt_pair_(self, a: str, b: str) -> str:
         row_a, col_a = divmod(self.key.index(a), DEFAULT_WIDTH)
