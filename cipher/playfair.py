@@ -47,13 +47,14 @@ class Playfair(Base):
     def encrypt(self, plain_text: str, *args, **kwargs) -> str:
         if not self.set_key(self.keyText.text()):
             return ''
+
         plain_text = re.sub('j', 'i', plain_text)
         plain_text = Base.remove_punctuation(plain_text.lower())
 
         temp_char = ''
 
         cipher_text = []
-        for char in plain_text:
+        for idx, char in enumerate(plain_text):
             if temp_char:
                 if temp_char == char:
                     cipher = self._encrypt_pair_(temp_char, 'x')
@@ -63,7 +64,7 @@ class Playfair(Base):
                     temp_char = ''
                 cipher_text.append(cipher)
             else:
-                if char == plain_text[-1]:
+                if idx == len(plain_text) - 1:
                     # last but not pair
                     cipher_text.append(self._encrypt_pair_(char, 'x'))
                 else:
