@@ -107,6 +107,12 @@ class Enigma(Base):
         self.position[2] = self.rotor_3_lineEdit.text(
         )  # current rotor position
 
+        self.rotors[0] = self.rotor_1_comboBox.currentIndex()
+        self.rotors[1] = self.rotor_2_comboBox.currentIndex()
+        self.rotors[2] = self.rotor_3_comboBox.currentIndex()
+
+        self.reflector = self.reflector_comboBox.currentIndex()
+
         if any([self.position[idx] == '' for idx in range(3)]):
             return ''
 
