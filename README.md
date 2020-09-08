@@ -18,5 +18,5 @@ Run Program
 6. Super Encryption
 
 ## Author
-13517012 | Johanes
-13517066 | Willy Santoso
+- 13517012 | Johanes
+- 13517066 | Willy Santoso
