@@ -225,7 +225,7 @@ class Ui_MainWindow(object):
         self.cipher_text = self.cipher.encrypt(input_text)
         if (self.normalSpace.isChecked()):
             self.groupWithNormalSpace()
-        elif(self.noSpace.isChecked()):
+        elif (self.noSpace.isChecked()):
             self.groupInOne()
         else:
             self.groupInFive()
@@ -233,7 +233,7 @@ class Ui_MainWindow(object):
     def decrypt_clicked(self):
         input_text = self.plainText.toPlainText()
         self.cipher_text = self.cipher.decrypt(input_text)
-        if(self.normalSpace.isChecked()):
+        if (self.normalSpace.isChecked()):
             self.groupWithNormalSpace()
         elif (self.noSpace.isChecked()):
             self.groupInOne()
@@ -255,10 +255,9 @@ class Ui_MainWindow(object):
         self.cipher.render(self)
 
     def groupInFive(self):
-        resultText = ' '.join([
-            self.cipher_text[idx:idx + 5]
-            for idx in range(0, len(self.cipher_text), 5)
-        ])
+        no_space = self.cipher_text.replace(' ', '')
+        resultText = ' '.join(
+            [no_space[idx:idx + 5] for idx in range(0, len(no_space), 5)])
         self.cipherText.setPlainText(resultText)
 
     def groupInOne(self):
@@ -291,6 +290,7 @@ class Ui_MainWindow(object):
         if fileName:
             with open(fileName, 'w') as f:
                 f.write(self.cipherText.toPlainText())
+
 
 if __name__ == "__main__":
     import sys
