@@ -25,7 +25,7 @@ class Enigma(Base):
         self.rotors = [r - 1 for r in rotors]  # convert to base 0
         self.reflector = ord(reflector) - ord('b')
         assert (self.reflector >= 0 and self.reflector <= 1)
-        # data from wikipedia, https://en.wikipedia.org/wiki/Enigma_rotor_details#Rotor_wiring_tables
+        # data from https://www.cryptomuseum.com/crypto/enigma/wiring.htm#10
         self.rotor_list = [
             'ekmflgdqvzntowyhxuspaibrcj', 'ajdksiruxblhwtmcqgznpyfvoe',
             'bdfhjlcprtxvznyeiwgakmusqo', 'esovpzjayquirhxlnftgkdcmwb',
