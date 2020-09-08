@@ -17,7 +17,7 @@ class Hill(Base):
         if(self.validate(plain_text)):
             self.processingKey()
             list_int_plain_text = Base.str_to_list_int((Base.remove_punctuation(plain_text)).lower(), *args, **kwargs)
-            list_int_key = Base.str_to_list_int(self.key, *args, **kwargs)
+            list_int_key = Base.str_to_list_int(self.key.lower(), *args, **kwargs)
 
             #Convert into matrix
             matrix_int_plain_text = [list_int_plain_text[i:i+int(self.m_linear)] for i in range (0, len(list_int_plain_text), int(self.m_linear))]
@@ -52,7 +52,7 @@ class Hill(Base):
         if(self.validate(cipher_text)):
             self.processingKey()
             list_int_cipher_text = Base.str_to_list_int((Base.remove_punctuation(cipher_text)).lower(), *args, **kwargs)
-            list_int_key = Base.str_to_list_int(self.key, *args, **kwargs)
+            list_int_key = Base.str_to_list_int(self.key.lower(), *args, **kwargs)
 
             #Convert into matrix
             matrix_int_cipher_text = [list_int_cipher_text[i:i+int(self.m_linear)] for i in range (0, len(list_int_cipher_text), int(self.m_linear))]
@@ -62,6 +62,7 @@ class Hill(Base):
 
             determinant = int(round(np.linalg.det(matrix_key)))
             if(determinant == 0 or not Base.isCoprime(abs(determinant), NUMBER_OF_ALPHABET)):
+                print("INVALID KEY")
                 return ''
             
             inverse_matrix_key =  (np.round_((np.linalg.inv(matrix_key) *determinant) * Base.modInverse(determinant, NUMBER_OF_ALPHABET))).astype(int) % NUMBER_OF_ALPHABET
@@ -107,8 +108,8 @@ class Hill(Base):
         if(len(self.key) > m * m):
             self.key = self.key[0:m * m]
         elif(len(self.key) < m * m):
-            self.key += str(''.join(random.choices(string.ascii_uppercase, k=m * m-len(self.key)))) 
-
+            self.key += str(''.join(random.choices(string.ascii_lowercase, k=m * m-len(self.key)))) 
+            self.keyInput.setText(self.key)
 
     def render(self, window: Ui_MainWindow):
         self.verticalLayoutWidget = QtWidgets.QWidget(window.cipherWidget)
@@ -142,4 +143,4 @@ class Hill(Base):
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
         self.label_2.setText(_translate("MainWindow", "Key"))
-        self.label.setText(_translate("MainWindow", "M (Linear)"))
+        self.label.setText(_translate("MainWindow", "Matrix Size"))
