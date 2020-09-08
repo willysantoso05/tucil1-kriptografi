@@ -1,7 +1,10 @@
 # Cipher Encryption
 
+Programming Language : Python
+GUI : PyQT
+
 Installation
-> conda env create -n <ENV_FILE> -f env.yml
+> conda env create -n <ENV_NAME> -f env.yml
 
 Run Program
 > python main.py
